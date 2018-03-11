@@ -1,0 +1,270 @@
+
+
+    <script src="//code.jquery.com/jquery-2.1.0.min.js"></script><!-- Bootstrap v3.0.3 -->
+    <link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://rawgit.com/wbotelhos/raty/master/lib/jquery.raty.js"></script>
+    <script src="//code.jquery.com/jquery-2.1.0.min.js"></script><!-- Bootstrap v3.0.3 -->
+    <link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://rawgit.com/wbotelhos/raty/master/lib/jquery.raty.js"></script>
+    <form action="https://workersandbox.mturk.com/mturk/externalSubmit" method="post">
+    <div id="container-instructions">
+        <input type="hidden" id="assignmentId" name="assignmentId" value="{{ assignmentId }}">
+        <input type="hidden" id="hitId" name="hitId" value="{{ hitId }}">
+        <input type="hidden" id="workerId" name="workerId" value="{{ workerId }}">
+        <input type="hidden" id="startTime" name="startTime" value="{{ startTime }}">
+
+        <div id="M0" class="instructions well">
+            <p>In this task you will be shown 1 messages. Joe will be receiving these messages to help him walk more. </p>
+            
+            <p>You will be asked to rate on multiple criterias of:  <strong>Appropriateness to Joe</strong> and <strong>Interesting</strong>
+            </p>
+            <p>Meet Joe, </p> 
+            <!-- <p>He has recently realized that he is not active enough and has decided to increase his physical activity by walking more.</p> -->
+
+            <table class="instruction">
+                <tbody>
+                    <tr>
+                        <td>
+                            <p><img src="https://raw.githubusercontent.com/InteractionEcologies/PCBC_MTURK/master/chris_small.jpg" /></p>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>He is 29&nbsp;years old</li>
+                                <li>He lives with his partner in San Francisco and&nbsp;doesnt have kids at the moment</li>
+                                <li>He works as a programmer in a software company in downtown San Francisco</li>
+                                <li>His office is&nbsp;30 mins away from his house and he commutes by bus</li>
+                                <li>He occasionally runs and&nbsp;play sports</li>
+                                <li>His interests: Computer programming, playing video games, watch NBA and Game of Thrones&nbsp; </li>
+                            </ul>
+
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="text-align: center;"><span style="color: rgb(50, 51, 51); line-height: normal; font-size: 1em; background-color: transparent;">Recently, Joe has realized that he is not active enough and has decided to increase his physical activity by walking more.</span></p>
+
+            <p style="text-align: center;">
+                <button type="button" onclick="Next()" id="startButton">Start</button>
+            </p>
+        </div>
+        
+        <div id="situation" class="well">
+            <p class="instruction">Here is the situation Joe is in:</p>
+
+            <p style="text-align: center;"><span class="warm">&quot;alalalaaa sdfdsfsdfs &quot;</span></p>
+            
+        </div>
+
+
+    
+        <div id="M1" class="message_containers well">
+            <p class="instruction">Message to help Joe walk more:</p>
+            <p style="text-align: center;"><span id="message1_text" class="message">&quot;Message1&quot;</span></p>
+            <textarea class="form-control" cols="30" id="message1_text" name="message1_text" style="display:none">Message1</textarea>   
+            
+            <p class="instruction">Imagine this message was sent to Joe. <br /> Please rate them based upon how likely they are to support Joe in walking more.</p>
+            
+            <p class="instruction">Enter your comments here:</p>
+            <textarea class="form-control" cols="30" id="message1_comment" name="message1_comment" placeholder="" rows="1"></textarea>
+            <br />
+    
+     <span class="scale">Interesting:</span>
+          <span class="instruction">Please rate the message if it might be interesting to Joe</span>
+            <div class='ratings'>
+                <div id="stars_1_Interesting" class="stars" data-message="message1"> </div>
+                <div id="hint_1_Interesting" class="hints"></div>
+                <textarea class="form-control" cols="30" id="message1_rating_Interesting" name="message1_rating_Interesting" style="display:none"></textarea>   
+            </div>
+    
+     <span class="scale">Appropriate for Joe:</span>
+          <span class="instruction">Please rate this messaage based on how appropriate it would be to Joe in the situation</span>
+            <div class='ratings'>
+                <div id="stars_1_AptJ" class="stars" data-message="message1"> </div>
+                <div id="hint_1_AptJ" class="hints"></div>
+                <textarea class="form-control" cols="30" id="message1_rating_AptJ" name="message1_rating_AptJ" style="display:none"></textarea>   
+            </div>
+          
+            <p style="text-align: center;">
+                <button type="button" id="previousButton" onclick="Previous()">Previous</button>
+                <button type="button" id="nextButton" onclick="Next()">Next</button>
+            </p>
+        </div>
+    
+
+
+        <div id="M2"   class="instructions well">
+            <p>Thanks for completing this task!</p>
+            <p class="instruction">If you have any feedback for us, please provide it below. It will help us to improve. </p>
+            <textarea class="form-control" cols="30" id="feedback_comment" name="feedback_comment" placeholder="" rows="1"></textarea>
+            <p style="text-align: center;">
+                <button type="button" id="previousButton" onclick="Previous()">Previous</button>
+                <input type="submit" id='submitButton' label="Submit"></input>
+            </p>
+        </div>
+        <!-- close container -->
+    </div>
+    </form>
+
+
+
+    <style id="jsbin-css">
+        body {
+            padding:0px;
+            margin: 0px;
+            background-color: white;
+            color: black;
+            font-weight: 300; 
+            font-size: 13pt;
+        }
+
+        .textareac {
+            padding:10px;
+            margin: 0px;
+            background-color: white;
+            color: #16A085;
+            font-weight: 300; 
+            font-size: 13pt;
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        }
+
+        label{
+            font-weight: 300;
+        }
+
+        /* text styling */
+        strong {
+            font-weight: 600;         
+        }
+
+        .warm {
+            color: steelblue;
+            text-align: justify;
+        }
+
+        .instruction {
+            color: darkgray;
+        }
+
+        .message{
+            color: #1BA39C
+        }
+
+        /* these are all the same for now, but easy to modify individually */
+        #container-instructions {
+            top: 0px; /* Header Height */
+            bottom: 0px; /* Footer Height */
+            left: 0px;
+            right: 0px;
+            padding: 100px;
+            padding-top: 5%;
+            border: 18px solid #f3f3f3;
+            height: 620px;
+            background: white;
+        }
+
+        .ratings{
+            text-align:center;
+            font-size:14px;
+        }
+        .scale{
+            color: gray;
+            text-align: justify;
+    }
+    </style>
+    <script>
+        function LimtCharacters(txtMsg, CharLength, indicator) {
+            label = indicator + "_label";
+            intro = indicator + "_text";
+
+            chars = txtMsg.value.length;
+            document.getElementById(label).innerHTML = chars + " / 140";
+            document.getElementById(intro).style.color = "lightgray";
+        }
+
+
+        var selected = 0;
+
+
+    function GetConfig(i, scale){
+      ret = {   
+        
+                path:'https://rawgit.com/wbotelhos/raty/master/lib/images/',
+                target:'#hint_'+i+"_"+scale,
+                targetText:'Please rate',
+                targetKeep : true,
+                hints: ['bad', 'poor', 'regular', 'good', 'awesome'],
+                click: function(score, evt) {
+                    RateMessage(score,$(this).attr('data-message'),scale);
+               
+                }
+            };
+      return ret;
+    }
+
+        function RateMessage(score, messageid, scaleid){
+            $("#"+messageid+'_rating_'+scaleid).val(score);
+    }
+
+    var scale_types = ["Interesting","AptJ"];
+
+    $(document).ready(function () {
+      $("#submitButton").attr("disabled", true);
+    //   $("#situation").hide()
+        $("#message1_r5").attr("disabled", true);
+        for (i =0 ; i<25; i++){
+          for (var j=0;j<scale_types.length; j++){
+            $("#stars_"+i+"_"+scale_types[j]).raty(GetConfig(i,scale_types[j]));
+          } 
+    //      UnLoadMessageContainer(i);
+        }
+        LoadMessageContainer(0);
+    });
+
+
+    $("input:submit").click(function(e) {
+    e.preventDefault();
+
+    // submit to our server
+    $.ajax({
+        url: "/submit",
+        type: 'post',
+        data: $('form').serialize(),
+        success: function(result) {
+            // submit to mechanical turk
+            $('form').submit();
+        }
+    });
+    });
+
+    function Next(){
+        for (i =0 ; i<25; i++){
+            UnLoadMessageContainer(i);
+        }
+        LoadMessageContainer(selected+1);
+        if (selected == 1){
+            $("#situation").show(300);
+        }
+        if ($('#M'+(selected+2)).length === 0){
+            $("#submitButton").attr("disabled", false);
+        }
+    }
+
+    function Previous(){
+        UnLoadMessageContainer(selected);
+        LoadMessageContainer(selected-1);
+    }
+
+    function LoadMessageContainer(number) {
+        selected=number;
+        var name = "M"+number; 
+        $("#"+name).show(500);
+
+    }
+    function UnLoadMessageContainer(number) {
+        var name = "M"+number; 
+        $("#"+name).hide(500);
+    }
+    </script>
+
+        

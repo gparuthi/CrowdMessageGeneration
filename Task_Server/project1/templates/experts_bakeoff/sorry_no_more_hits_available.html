@@ -1,0 +1,37 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+
+	<title>{% block title %}{% endblock title%}</title>
+
+	<script type="text/javascript" src="//code.jquery.com/jquery-2.1.0.min.js"></script><!-- Bootstrap v3.0.3 -->
+	<link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
+
+	<link href="intecolab.com:5000/public/styles.css" rel="stylesheet" />
+
+	</style>
+</head>
+<body>
+	
+
+	{% if requirements.use_sandbox %}
+		<form action="https://workersandbox.mturk.com/mturk/externalSubmit" method="post">
+	{% else %}
+		<form action="https://www.mturk.com/mturk/externalSubmit" method="post">
+	{% endif %}
+
+		<div id="container-instructions">   
+
+			{% for requirement in requirements %}
+			<input type="hidden" id="{{ requirement }}" name="{{ requirement }}" value="{{ requirements[requirement] }}" />
+			{% endfor %}
+			
+			<div id="please_accept" style="display: block; position: absolute; font-size: 40; opacity: 0.4; text-align: center;" class="well">
+				<p><span class="warm">Sorry, no more HITS are available for you. Please stay tuned for more.</span></p>
+			</div>
+			
+			  
+		</div>
+		</form>
+</body>
+	
+</html>

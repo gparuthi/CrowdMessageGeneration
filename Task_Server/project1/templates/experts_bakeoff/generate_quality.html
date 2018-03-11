@@ -1,0 +1,118 @@
+{% extends "base_hit.html" %}
+
+{% set message_count_per_hit = 3 %}
+
+{%- from 'helpers.html' import persona_content, two_tips with context %}
+
+{% block title %}Generate Hit{% endblock %}
+
+{% block js %}
+  <style type="text/css">
+    .radio_option{
+      padding-left: 20px;
+    }
+  </style>
+    
+   <script type="text/javascript">
+ 
+      function LimtCharacters(txtMsg, CharLength, indicator) {
+          label = indicator + "_label";
+          intro = indicator + "_text";
+   
+          chars = txtMsg.value.length;
+          document.getElementById(label).innerHTML = chars + " / 140";
+
+          $("#submitButton").attr("disabled", false);
+   
+          document.getElementById(indicator+"_review").innerHTML = '"' + txtMsg.value + '"';
+   
+      }
+      $("#submitButton").click(function(e) {
+      e.preventDefault();
+      for (i =0 ; i<25; i++){
+        if ($("#message"+i+'_text').length>0)
+        {
+           if ($("#message"+i+'_text').val().length<25){
+              $("#message"+i+'_please').show();
+              return ;
+            }else{
+              $("#message"+i+'_please').hide();
+            }
+        }
+       
+      }
+      onSubmitClick();
+        });
+      </script>
+   {{ super() }}
+
+{% endblock js%}
+
+{% set title = "Generate Messages" %}
+
+{% block content %}
+<div id="start" class="well">
+    <H3>{{ title }}</H3>
+
+    <p>Come up with three messages to help motivate the person described below to walk more. The messages will be sent as texts to their phones. Assume the person is not currently exercising.</p>
+
+    <p>Each message is limited to 140 characters. <span>Copy-pasted or&nbsp;duplicate messages from other HITS&nbsp;will be rejected.</span></p>
+
+    <div id="M0">
+               
+      <p class="">To help you produce effective messages, our health communication experts have condensed their knowledge into a few key tips:</p>
+
+      {{ two_tips()}}
+
+    </div>
+
+    <hr/>
+     <p>Now, use this information to write three messages that will motivate {{ persona }} to walk more.</p>
+
+    {{ persona_content(persona) }}
+
+    <hr/>
+
+    {% for mid in range(1,(message_count_per_hit + 1)) %}
+
+     <p class="instruction">({{ mid }}/{{ message_count_per_hit }})</p>       
+      <p id='message{{ mid }}_please' class='bad' style="display:none">Please improve this message. It looks too short. </p>     
+            <textarea class="form-control" cols="30" rows="2" id="message{{ mid }}_text" name="message{{ mid }}_text" onkeyup="LimtCharacters(this,140,'message{{ mid }}');" placeholder=""></textarea>
+            <label id="message{{ mid }}_label" style="">0</label>
+            
+    {% endfor %}
+
+    <hr/>
+    <p>Thanks for completing this task!</p>
+    <p>Please review your messages and answer the following questions:</p>
+    {% for mid in range(1,(message_count_per_hit + 1)) %}
+    <p class="message" id="message{{ mid }}_review"></p>
+    {% endfor %}
+    <div>
+         <p>1. What is your age?</p>
+        
+          <input class="indented" type="radio" name="age" id="age_0" value="0-18" /><span class="radio_option"> Under 18 </span><br/>
+          <input class="indented" type="radio" name="age" id="age_1" value="18–24" /><span class="radio_option"> 18–24 years </span><br/>
+          <input class="indented" type="radio" name="age" id="age_2" value="25–34" /><span class="radio_option"> 25–34 years </span><br/>
+          <input class="indented" type="radio" name="age" id="age_3" value="35–44" /><span class="radio_option"> 35–44 years </span><br/>
+          <input class="indented" type="radio" name="age" id="age_4" value="45–54" /><span class="radio_option"> 45–54 years </span><br/>
+          <input class="indented" type="radio" name="age" id="age_5" value="55–64" /><span class="radio_option"> 55–64 years </span><br/>
+          <input class="indented" type="radio" name="age" id="age_6" value="65" /><span class="radio_option"> 65 or older </span><br/>
+        <br/>
+    
+        <p>2. What is the highest level of education that you have completed?</p>
+        
+          <input class="indented" type="radio" name="education" id="education_0" value="gradeschool" /><span class="radio_option"> Some grade school (1–8) </span><br/>
+          <input class="indented" type="radio" name="education" id="education_1" value="highschool0" /><span class="radio_option"> Some high school (grades 9–12) </span><br/>
+          <input class="indented" type="radio" name="education" id="education_2" value="highschool1" /><span class="radio_option"> High school graduate </span><br/>
+          <input class="indented" type="radio" name="education" id="education_3" value="college0" /><span class="radio_option"> Some college or technical school </span><br/>
+          <input class="indented" type="radio" name="education" id="education_4" value="college1" /><span class="radio_option"> College graduate or beyond </span><br/>
+        </div>
+ </div>
+
+{% endblock %}
+
+
+
+
+

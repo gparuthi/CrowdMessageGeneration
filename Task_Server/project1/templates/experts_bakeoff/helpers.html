@@ -1,0 +1,86 @@
+{% macro rating_instructions(requirements) %}
+    <p>Our writers have produced {{ requirements.message_count_per_hit }} messages, intended to help motivate a person to walk more.</p>
+    
+    <strong>
+    <p>1. Please rate the overall quality of the messages from 0 to 10, with 0 being poor and 10 being excellent.</p>
+
+    <p>2. Please verify the grammatical correctness of the message.</p>
+    </strong> 
+    <hr/>
+
+    {% if (requirements.task_sub_type != 'experts') %}
+    <div id="M0">
+
+      <p class="">Consider the following rules while rating the messages:</p>
+    
+        {{two_tips()}}
+
+    </div>
+    {% endif %}
+
+    <hr/>
+    <!-- <p>To prevent careless responses, some un-related messages have been mixed in. This will help us to verify the correctness of your response.
+    <br/> Your assignment will be rejected automatically if you: </br>1. Fail to rate verification messages correctly. Please be careful in your response.</br>2. Submit too quickly. Please make sure to spend enough time reading each message.</p> -->
+    <p>To prevent careless responses, some un-related messages have been mixed in. This will help us to verify that you were attending to the task.</p>
+
+{% endmacro %}
+
+{% macro persona_content(persona) %}
+    <p>Meet {{ persona }},&nbsp;</p>
+
+        <table class="persona well center">
+            <tbody>
+                <tr>
+                    <td>
+                     <p style="font-size: 0.9em;"><img src="{{ personas[persona]['photo_url'] }}" /></p>
+                    </td>
+                    <td>
+                    <ul>
+                        {% for rg in personas[persona]['roles_goals'] %}
+                        <li>{{ rg }}</li>
+                        {% endfor %}
+                    </ul>
+                    <p style="text-align: center;">&nbsp;</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+      <hr/>
+
+{% endmacro %}
+
+
+{% macro tips_instruction() %}
+    <p class="">To help you produce effective messages, our health communication experts have condensed their knowledge into a few key tips:</p>
+{% endmacro %}
+
+ {% macro two_tips() %}
+    <div class="indented">
+          <p><p><strong>1. Frame the message as a question or a challenge rather than a command.</strong></p>
+            <span>Not Recommended:</span>
+            <span class='bad'>"You should take a 10 minute walk in the fresh air at lunch!"</span></br>
+             <span>Recommended:</span>
+             <span class='good'>"Maybe consider a walk during a workbreak. How might that help with the rest of the day?"</span>
+                        </p>
+        <p><p><strong>2. Don't oversell it. Use more tentative language.</strong></p>
+                 <span>Not Recommended:</span>
+        <span class='bad'>"You have a 45 min lunch break. If you took a walk, you will feel better."</span></br>
+         <span>Recommended:</span>
+        <span class='good'>"You have a 45 min lunch break, taking a walk might make you feel better the rest of the day."</span>
+                        </p>
+        <p><p><strong>3. Incorporate Individual Characteristics</strong></p>
+            Messages are better received if they are tailored to the individual.
+                        </p>
+    </div>
+{% endmacro %}
+<!-- 
+{% macro third_tip() %}
+       <p><p><strong>3. Link messages to people's important goals and values.</strong></p>
+                             <span>Example 1:</span>
+                 <span class='good'>"Starting to exercise will give you more energy to play with your children, whom you love so much."</span> </br>
+                 <span>Example 2:</span>
+                 <span class='good'>"If you start exercising you may begin to get control of your chaotic life."</span>
+            </p>
+{% endmacro %} -->
+
+

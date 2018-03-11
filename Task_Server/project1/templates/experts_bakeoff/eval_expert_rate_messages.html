@@ -1,0 +1,175 @@
+{% extends "rating_base.html" %}
+
+{% set title = "Evaluate Messages" %}
+
+{%- from 'helpers.html' import persona_content with context %}
+
+{% block title %}Evaluate Messages{% endblock %}
+
+{% set scales = [
+      ["Tailored","How well does the message match the character?"], 
+      ["Motivation","How motivating is this message?"], 
+      ["Creative","How creative is this message?"], 
+      ["Overall","Overall, how would you rate the quality of this message?"]
+      ] %}
+
+{% block js %}
+  {{ super() }}
+  
+  <script type="text/javascript">
+    var scale_types = {{ scales }};
+
+    var message_count = {{ requirements.message_count_per_hit }};
+    var eval_message_count = {{ requirements.eval_messages|length }}
+
+
+    function RateEvalMessage(score, messageid, scaleid, i){
+      $("#"+messageid+'_rating_'+scaleid).val(score);
+      // $("#M"+(i+1)).show();
+    }
+
+    function showNext(i){
+    // Do something interesting here
+    return function(){
+        $("#message"+i+'_rating_Likely').val($(this).val());
+        $("#M"+(i+1)).show();
+        console.log(i+':'+$(this).val());
+        if (i == {{ requirements.message_count_per_hit }}){
+          $("#nextButton").show()
+        }
+      }
+    }
+
+    function showNextScale(i, scale){
+    // Do something interesting here
+    return function(){
+        $("#message"+i+'_rating_'+scale).val($(this).val());
+        // $("#M"+(i+1)).show();
+        console.log(scale + ':' + i + ':'+$(this).val());
+      }
+    }
+
+    $(document).ready(function () {
+
+      $("#thanks").hide(0);
+
+      for (i =0 ; i<(eval_message_count+1); i++){
+       for (var scale in scale_types){
+          $("input[name='quality_"+i+"_"+scale+"']").on('change', showNextScale(i, scale));
+        }
+        } 
+
+        // window.location.replace("https://intecolab.com:5000/get_hit?hitId=3KLL7H3EGDDOV7AM03MZTJC9641VHI&assignmentId=test281326");
+
+    });
+
+
+    
+    function Next(){
+
+
+      // for (i =0 ; i<(message_count+1); i++){
+      //   if ($("#message"+i+'_rating_Likely').val()===''){
+      //     $("#message"+i+'_please').show();
+      //     return ;
+      //   }else{
+      //     $("#message"+i+'_please').hide();
+      //   }
+      // }
+      $("#next").hide(300);
+      $("#start").hide(300);
+      $("#eval").show(300);
+      $("#thanks").show(300);
+    }
+
+
+  </script>
+   
+
+{% endblock js%}
+
+
+{% block content %}
+
+ <H3>{{ title }}</H3>
+
+    <p>Our writers have produced {{ requirements.message_count_per_hit }} messages, intended to help motivate a person to walk more.</p>
+    
+    <strong>
+    <p>Please rate the messages on 4 scales from 0 to 10, with 0 being poor and 10 being excellent.</p>
+
+    </strong> 
+
+
+    {% if (requirements.task_sub_type != 'experts') %}
+    <div id="M0">
+
+      <p class="">Consider the following rules while rating the messages:</p>
+    
+        {{two_tips()}}
+
+    </div>
+    {% endif %}
+
+    
+     <p>{{ cue_text }}</p>
+     <hr/>
+    
+    {{ persona_content(persona) }}
+
+     
+
+    {% for mid in range(1,(requirements.message_count_per_hit + 1)) %}
+
+    {% set midx = 'e' + mid|string()  %}
+    <div id="M{{ midx }}" class="message_containers">
+
+            <p class="instruction">({{ mid }}/{{ eval_message_count }})</p>
+            <p style="text-align: center;"><span id="message{{ midx }}_text" class="message">&quot;{{ requirements.messages[mid-1]['text'] }}&quot;</span></p>
+            <textarea class="form-control" cols="30" id="message{{ midx }}_text" name="message{{ midx }}_text" style="display:none">{{ requirements.messages[mid-1]['text'] }}</textarea>   
+             <textarea class="form-control" cols="30" id="message{{ midx }}_id" name="message{{ midx }}_id" style="display:none">{{ requirements.messages[mid-1]['_id'] }}</textarea>   
+             <textarea class="form-control" cols="30" id="message{{ midx }}_shortname" name="message{{ midx }}_shortname" style="display:none">{{ requirements.messages[mid-1]['shortname'] }}</textarea>   
+            <p id='message{{ midx }}_please' class='bad' style="display:none">Please make sure, you have rated the message. </p>
+            <div class='ratings'>
+            
+            {% for scale in scales %}
+            <br/>
+                <span class="bad" style="font-weight:bold">{{ scale[0] }}:</span> <span class="bad">{{ scale[1] }}</span>
+
+             <table class="center">
+              <tr>
+                <td></td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td></td>
+              </tr>
+              <tr>
+                <td>Poor</td>
+                <td><input type="radio" name="quality_{{ mid }}_{{ scale[0] }}" id="quality_{{ mid }}_{{ scale[0] }}_0" value="0" /></td>
+                <td><input type="radio" name="quality_{{ mid }}_{{ scale[0] }}" id="quality_{{ mid }}_{{ scale[0] }}_1" value="1" /></td>
+                <td><input type="radio" name="quality_{{ mid }}_{{ scale[0] }}" id="quality_{{ mid }}_{{ scale[0] }}_2" value="2" /></td>
+                <td><input type="radio" name="quality_{{ mid }}_{{ scale[0] }}" id="quality_{{ mid }}_{{ scale[0] }}_3" value="3" /></td>
+                <td><input type="radio" name="quality_{{ mid }}_{{ scale[0] }}" id="quality_{{ mid }}_{{ scale[0] }}_4" value="4" /></td>
+                <td><input type="radio" name="quality_{{ mid }}_{{ scale[0] }}" id="quality_{{ mid }}_{{ scale[0] }}_5" value="5" /></td>
+                <td><input type="radio" name="quality_{{ mid }}_{{ scale[0] }}" id="quality_{{ mid }}_{{ scale[0] }}_6" value="6" /></td>
+                <td><input type="radio" name="quality_{{ mid }}_{{ scale[0] }}" id="quality_{{ mid }}_{{ scale[0] }}_7" value="7" /></td>
+                <td><input type="radio" name="quality_{{ mid }}_{{ scale[0] }}" id="quality_{{ mid }}_{{ scale[0] }}_8" value="8" /></td>
+                <td><input type="radio" name="quality_{{ mid }}_{{ scale[0] }}" id="quality_{{ mid }}_{{ scale[0] }}_9" value="9" /></td>
+                <td><input type="radio" name="quality_{{ mid }}_{{ scale[0] }}" id="quality_{{ mid }}_{{ scale[0] }}_10" value="10" /></td>
+                <td>Excellent</td>
+              </tr>
+            </table>
+                <textarea class="form-control" cols="30" id="message{{ midx }}_rating_{{ scale[0] }}" name="message{{ midx }}_rating_{{ scale[0] }}" style="display:none"></textarea>   
+              {% endfor %}
+
+
+            </div>
+
+      <hr/>
+    </div>
+    {% endfor %}
+ </div>
+
+{% endblock %}
+
+
+
+
+

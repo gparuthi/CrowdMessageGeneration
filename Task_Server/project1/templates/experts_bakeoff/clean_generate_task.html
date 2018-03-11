@@ -1,0 +1,72 @@
+{% extends "base_hit.html" %}
+
+{%- from 'helpers.html' import persona_content, content_tips with context %}
+
+{% block title %}Fix the message{% endblock %}
+
+{% block js %}
+
+    
+   <script type="text/javascript">
+ 
+      function LimtCharacters(txtMsg, CharLength, indicator) {
+          label = indicator + "_label";
+          intro = indicator + "_text";
+   
+          chars = txtMsg.value.length;
+          document.getElementById(label).innerHTML = chars + " / 140";
+
+          $("#submitButton").attr("disabled", false);
+   
+          document.getElementById(indicator+"_review").innerHTML = '"' + txtMsg.value + '"';
+   
+      }
+      $("#submitButton").click(function(e) {
+      e.preventDefault();
+      for (i =0 ; i<25; i++){
+        if ($("#message"+i+'_text').length>0)
+        {
+           if ($("#message"+i+'_text').val().length<25){
+              $("#message"+i+'_please').show();
+              return ;
+            }else{
+              $("#message"+i+'_please').hide();
+            }
+        }
+       
+      }
+      onSubmitClick();
+        });
+      </script>
+   {{ super() }}
+
+{% endblock js%}
+
+{% block content %}
+<div id="start" class="well">
+    <H3>Fix the grammar</H3>
+
+    <p>Here is a message that needs grammatical fixing.</p>
+    <p>Please rewrite the message such that your final message is grammatically correct but retains the content of the message.</p>
+
+    
+
+    <p style="text-align: center;"><span id="message_text" class="message">&quot;{{ requirements['text'] }}&quot;</span></p>
+            <textarea class="form-control" cols="30" id="message_text" name="message_text" style="display:none">{{ requirements['text'] }}</textarea>   
+             <textarea class="form-control" cols="30" id="message_id" name="message_id" style="display:none">{{ requirements['message_id'] }}</textarea>   
+             <textarea class="form-control" cols="30" id="message_shortname" name="message_shortname" style="display:none">{{ requirements['shortname'] }}</textarea>   
+
+      <p id='new_message_please' class='bad' style="display:none">Please improve this message. It looks too short. </p>     
+            <textarea class="form-control" cols="30" rows="2" id="new_message_text" name="new_message_text" onkeyup="LimtCharacters(this,140,'new_message');" placeholder="">{{ requirements['text'] }}</textarea>
+            <label id="new_message_label" style="">0</label>
+            
+    <hr/>
+    <p>Thanks for completing this task!</p>
+ </div>
+
+{% endblock %}
+
+
+
+
+

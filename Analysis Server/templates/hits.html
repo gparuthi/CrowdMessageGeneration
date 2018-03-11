@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		#location {
+			position: absolute;
+			width: 300px;
+			height: 300px;
+			left: 500px;
+			top: 300px;
+		}
+	/*	#svgVisualize{
+			width: 1000px;
+			height: 800px;
+		}*/
+		rect.bordered {
+			stroke: #E6E6E6;
+			stroke-width:2px;   
+		}
+	</style>
+	<script src="https://rawgit.com/mbostock/d3/master/d3.min.js" charset="utf-8"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		alldata = {"locations": [{"loc": {"lat": 42.280674378815945, "lon": -83.7404187516024}, "eth": 18.5, "dur": 2.75, "sth": 12.983333333333333, "name": "University of Michigan School of Information"}, {"loc": {"lat": 42.277782891, "lon": -83.7443174376}, "eth": 23, "dur": 1.4833333333333343, "sth": 21.516666666666666, "name": "Home"}], "events": [], "walk": [{"y": 24, "x": 20, "r": 0, "hour": 0}, {"y": 23, "x": 20, "r": 0, "hour": 1}, {"y": 22, "x": 20, "r": 0, "hour": 2}, {"y": 21, "x": 20, "r": 0, "hour": 3}, {"y": 20, "x": 20, "r": 0, "hour": 4}, {"y": 19, "x": 20, "r": 0, "hour": 5}, {"y": 18, "x": 20, "r": 0, "hour": 6}, {"y": 17, "x": 20, "r": 0, "hour": 7}, {"y": 16, "x": 20, "r": 0, "hour": 8}, {"y": 15, "x": 20, "r": 0, "hour": 9}, {"y": 14, "x": 20, "r": 0, "hour": 10}, {"y": 13, "x": 20, "r": 0, "hour": 11}, {"y": 12, "x": 20, "r": 2, "hour": 12}, {"y": 11, "x": 20, "r": 2, "hour": 13}, {"y": 10, "x": 20, "r": 0, "hour": 14}, {"y": 9, "x": 20, "r": 10, "hour": 15}, {"y": 8, "x": 20, "r": 2, "hour": 16}, {"y": 7, "x": 20, "r": 0, "hour": 17}, {"y": 6, "x": 20, "r": 6, "hour": 18}, {"y": 5, "x": 20, "r": 30, "hour": 19}, {"y": 4, "x": 20, "r": 34, "hour": 20}, {"y": 3, "x": 20, "r": 22, "hour": 21}, {"y": 2, "x": 20, "r": 0, "hour": 22}, {"y": 1, "x": 20, "r": 0, "hour": 23}]};
+		times = [{'name':"12a", 'i':0},
+		{'name':"1a", 'i':1},
+		{'name':"2a", 'i':2},
+		{'name':"3a", 'i':3},
+		{'name':"4a", 'i':4},
+		{'name':"5a", 'i':5},
+		{'name':"6a", 'i':6},
+		{'name':"7a", 'i':7},
+		{'name':"8a", 'i':8},
+		{'name':"9a", 'i':9},
+		{'name':"10a", 'i':10},
+		{'name':"11a", 'i':11},
+		{'name':"12p", 'i':12},
+		{'name':"1p", 'i':13},
+		{'name':"2p", 'i':14},
+		{'name':"3p", 'i':15},
+		{'name':"4p", 'i':16},
+		{'name':"5p", 'i':17},
+		{'name':"6p", 'i':18},
+		{'name':"7p", 'i':19},
+		{'name':"8p", 'i':20},
+		{'name':"9p", 'i':21},
+		{'name':"10p", 'i':22},
+		{'name':"11p", 'i':23}];
+		var margin = { top: 50, right: 0, bottom: 100, left: 30 },
+		width = 960 - margin.left - margin.right,
+		height = 430 - margin.top - margin.bottom,
+		gridSize = Math.floor(width / 24),
+		legendElementWidth = gridSize*2,
+		buckets = 9,
+          colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"], // alternatively colorbrewer.YlGnBu[9]
+          days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+      </script>
+      <script type="text/javascript">
+
+      	var alldata = {{ data|tojson|safe }};
+      	
+
+
+
+      </script>
+
+  </head>
+  <body>
+  	<table id="split">
+  		<thead></thead>
+  		<tbody></tbody>
+  	</table>
+  	<script type="text/javascript">
+
+  		var thead = d3.select("thead").selectAll("th")
+  		.data(d3.keys(alldata[0]))
+  		.enter().append("th").text(function(d){return d});
+// fill the table
+// create rows
+var tr = d3.select("tbody").selectAll("tr")
+.data(alldata).enter().append("tr")
+
+// cells
+var td = tr.selectAll("td")
+.data(function(d){return d3.values(d)})
+.enter().append("td")
+.html(function(d) {return d})
+
+
+
+</script>
+
+</body>
+</html>

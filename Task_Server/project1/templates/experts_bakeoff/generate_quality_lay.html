@@ -1,0 +1,92 @@
+{% extends "base_hit.html" %}
+
+{% block submit_url %}/thanks{% endblock %}
+
+{% set message_count_per_hit = 2 %}
+
+{%- from 'helpers.html' import persona_content, two_tips with context %}
+
+{% block title %}Generate Hit{% endblock %}
+
+{% block js %}
+  <style type="text/css">
+    .radio_option{
+      padding-left: 20px;
+    }
+  </style>
+    
+   <script type="text/javascript">
+ 
+      function LimtCharacters(txtMsg, CharLength, indicator) {
+          label = indicator + "_label";
+          intro = indicator + "_text";
+   
+          chars = txtMsg.value.length;
+          document.getElementById(label).innerHTML = chars + " / 140";
+
+          $("#submitButton").attr("disabled", false);
+   
+          document.getElementById(indicator+"_review").innerHTML = '"' + txtMsg.value + '"';
+   
+      }
+      $("#submitButton").click(function(e) {
+      e.preventDefault();
+      for (i =0 ; i<25; i++){
+        if ($("#message"+i+'_text').length>0)
+        {
+           if ($("#message"+i+'_text').val().length<25){
+              $("#message"+i+'_please').show();
+              return ;
+            }else{
+              $("#message"+i+'_please').hide();
+            }
+        }
+       
+      }
+      onSubmitClick();
+        });
+      </script>
+   {{ super() }}
+
+{% endblock js%}
+
+{% set title = "Generate Messages" %}
+
+{% block content %}
+<div id="start" class="well">
+    <H3>{{ title }}</H3>
+
+    <p>Come up with {{ message_count_per_hit }} messages to help motivate the person described below to walk more. The messages will be sent as texts to their phones. Assume the person is not currently exercising</p>
+
+    <p>Each message is limited to 140 characters.</p>
+
+    <hr/>
+
+    {{ persona_content(persona) }}
+
+    <hr/>
+
+    {% for mid in range(1,(message_count_per_hit + 1)) %}
+
+     <p class="instruction">({{ mid }}/{{ message_count_per_hit }})</p>       
+      <p id='message{{ mid }}_please' class='bad' style="display:none">Please improve this message. It looks too short. </p>     
+            <textarea class="form-control" cols="30" rows="2" id="message{{ mid }}_text" name="message{{ mid }}_text" onkeyup="LimtCharacters(this,140,'message{{ mid }}');" placeholder=""></textarea>
+            <label id="message{{ mid }}_label" style="">0</label>
+            
+    {% endfor %}
+
+    <hr/>
+    <p>Thanks for completing this task!</p>
+    <p>Please review your messages:</p>
+    {% for mid in range(1,(message_count_per_hit + 1)) %}
+    <p class="message" id="message{{ mid }}_review"></p>
+    {% endfor %}
+    
+ </div>
+
+{% endblock %}
+
+
+
+
+

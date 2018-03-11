@@ -1,0 +1,135 @@
+{% extends "base_hit.html" %}
+
+{% set title = "Rate Messages" %}
+
+{%- from 'helpers.html' import persona_content, rating_instructions, vote_tips with context %}
+
+{% block title %}Rate Messages{% endblock %}
+
+
+
+{% block js %}
+  
+   {{ super() }}
+   <style type="text/css">
+    td { 
+    padding: 5px 10px 5px 10px;
+    }
+    table{
+      color: #95A5A6;
+        font-size: inherit;
+    }
+
+     .likert ul
+    {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .likert li
+    {
+        float: left;
+        text-align: left;
+        list-style-type: none;
+        padding: 20px;
+    }
+
+    .center{
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .message_containers
+    {
+      margin-left: auto;
+      margin-right: auto;
+      width: 70%;
+
+    }
+  </style>
+<script type="text/javascript" src="https://rawgit.com/wbotelhos/raty/master/lib/jquery.raty.js"></script>
+{% endblock js%}
+
+{% macro messagesBlock() %}
+{% for mid in range(1,(requirements.message_count_per_hit + 1)) %}
+    <div id="M{{ mid }}" class="message_containers">
+
+            <p class="instruction">({{ mid }}/{{ requirements.message_count_per_hit }})</p>
+            <p style="text-align: center;"><span id="message{{ mid }}_text" class="message">&quot;{{ requirements.messages[mid-1]['text'] }}&quot;</span></p>
+            <textarea class="form-control" cols="30" id="message{{ mid }}_text" name="message{{ mid }}_text" style="display:none">{{ requirements.messages[mid-1]['text'] }}</textarea>   
+             <textarea class="form-control" cols="30" id="message{{ mid }}_id" name="message{{ mid }}_id" style="display:none">{{ requirements.messages[mid-1]['_id'] }}</textarea>   
+             <textarea class="form-control" cols="30" id="message{{ mid }}_shortname" name="message{{ mid }}_shortname" style="display:none">{{ requirements.messages[mid-1]['shortname'] }}</textarea>   
+            <p id='message{{ mid }}_please' class='bad' style="display:none">Please make sure, you have rated the message. </p>
+    <div class='ratings'>
+
+          <table class="center">
+            <tr>
+              <td></td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td></td>
+            </tr>
+            <tr>
+              <td>Poor</td>
+              <td><input type="radio" name="quality_{{ mid }}" id="quality_{{ mid }}_0" value="0" /></td>
+              <td><input type="radio" name="quality_{{ mid }}" id="quality_{{ mid }}_1" value="1" /></td>
+              <td><input type="radio" name="quality_{{ mid }}" id="quality_{{ mid }}_2" value="2" /></td>
+              <td><input type="radio" name="quality_{{ mid }}" id="quality_{{ mid }}_3" value="3" /></td>
+              <td><input type="radio" name="quality_{{ mid }}" id="quality_{{ mid }}_4" value="4" /></td>
+              <td><input type="radio" name="quality_{{ mid }}" id="quality_{{ mid }}_5" value="5" /></td>
+              <td><input type="radio" name="quality_{{ mid }}" id="quality_{{ mid }}_6" value="6" /></td>
+              <td><input type="radio" name="quality_{{ mid }}" id="quality_{{ mid }}_7" value="7" /></td>
+              <td><input type="radio" name="quality_{{ mid }}" id="quality_{{ mid }}_8" value="8" /></td>
+              <td><input type="radio" name="quality_{{ mid }}" id="quality_{{ mid }}_9" value="9" /></td>
+              <td><input type="radio" name="quality_{{ mid }}" id="quality_{{ mid }}_10" value="10" /></td>
+              <td>Excellent</td>
+            </tr>
+          </table>
+
+          <br/>
+                <!-- <div id="stars_{{ mid }}_Likely" class="stars" data-message="message{{ mid }}"> </div>
+                <div id="hint_{{ mid }}_Likely" class="hints"></div> -->
+                <textarea class="form-control" cols="30" id="message{{ mid }}_rating_Likely" name="message{{ mid }}_rating_Likely" style="display:none"></textarea>   
+                <p></p>
+                {% if (requirements.task_sub_type != 'experts' and requirements.task_sub_type != 'turk') %}
+                Grammar needs fixing?: 
+                
+                  <input type="hidden" id='message{{ mid }}_needs_fixing_no' type="checkbox" name='message{{ mid }}_needs_fixing' value=0 checked  />
+                  <input id='message{{ mid }}_needs_fixing_yes' type="checkbox" name='message{{ mid }}_needs_fixing' value=1 /> Yes
+                {% endif %}
+        </div>
+        <hr/>
+    </div>
+    
+    {% endfor %}
+{% endmacro %}
+
+
+{% block content %}
+<div id="start" class="well">
+
+   <H3>{{ title }}</H3>
+
+    {{ rating_instructions(requirements) }}
+
+    
+     <p>{{ cue_text }}</p>
+     <hr/>
+    
+    {{ persona_content(persona) }}
+
+     {{ messagesBlock }}
+
+    
+
+    <hr/>
+    <p>Thanks for completing this task!</p>
+ </div>
+
+ {% block more_content%}
+
+ {% endblock %}
+{% endblock %}
+
+
+
+
+

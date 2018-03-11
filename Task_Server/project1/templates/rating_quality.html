@@ -1,0 +1,52 @@
+{% set cue_text = "Now, use the information and the above tips to rate messages. " %}
+
+{% block js %}
+{{ super() }}
+
+<script type="text/javascript">
+    var scale_types = ['Likely'];
+
+    function showNext(i){
+    // Do something interesting here
+    return function(){
+        $("#message"+i+'_rating_Likely').val($(this).val());
+        $("#M"+(i+1)).show();
+        console.log(i+':'+$(this).val());
+      }
+    }
+
+    $(document).ready(function () {
+
+      for (i =0 ; i<25; i++){
+        // for (var j=0;j<scale_types.length; j++){
+          // $("#stars_"+i+"_"+scale_types[j]).raty(GetConfig(i,scale_types[j]));
+        // } 
+        $("input[name='quality_"+i+"']").on('change', showNext(i));
+        $("#M"+(i+2)).hide();
+
+      }
+
+    });
+
+    $("#submitButton").click(function(e) {
+      e.preventDefault();
+
+      for (i =0 ; i<25; i++){
+        if ($("#message"+i+'_rating_Likely').val()===''){
+          $("#message"+i+'_please').show();
+          return ;
+        }else{
+          $("#message"+i+'_please').hide();
+        }
+      }
+
+      onSubmitClick();
+    });
+
+
+
+  </script>
+
+{% endblock js%}
+
+{% include "rating_base.html" %}

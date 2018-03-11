@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	
+	<link type="text/css" href="https://rawgit.com/nathansmith/unsemantic/master/assets/stylesheets/unsemantic-grid-responsive.css" rel="stylesheet" />
+	<link type="text/css" href="http://dimsemenov-static.s3.amazonaws.com/dist/magnific-popup.css" rel="stylesheet" />
+	<style type="text/css">
+		#location {
+			position: absolute;
+			width: 300px;
+			height: 300px;
+			left: 500px;
+			top: 300px;
+		}
+	/*	#svgVisualize{
+			width: 1000px;
+			height: 800px;
+		}*/
+		rect.bordered {
+			stroke: #E6E6E6;
+			stroke-width:2px;   
+		}
+		.mfp-iframe-scaler iframe {
+			position: absolute;
+			display: block;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+			background: white; }
+		.grid-50, .grid-25 {
+			border: 1px solid;
+			background: #ECECEC;
+		}
+		.grid-container {
+			min-width: 300px;
+			max-width: 2000px;
+		}
+		#badWorkers, #experiments{
+			float: right;
+		}
+		</style>
+
+		
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+		<script src="http://dimsemenov-static.s3.amazonaws.com/dist/jquery.magnific-popup.min.js"></script>
+
+		<script type="text/javascript">
+
+			$(document).ready(function() {
+				$('.link').magnificPopup({
+					type: 'iframe',		  
+					iframe: {
+						patterns: {
+							intecolab: {
+								index: '/',
+
+								id: function(url) {        
+									return url;
+								},
+								src: '%id%'
+
+							}
+						}
+					}
+
+
+				});
+			});
+
+			var APP = (function($, window, document, undefined) {
+				'use strict';
+
+				$(document).ready(function() {
+					APP.go();
+				});
+
+		  // "Private constant" vars.
+		  var body;
+
+		  return {
+			    // APP.go
+			    go: function() {
+			    	var i, j = APP.init;
+
+			    	for (i in j) {
+			        // Run everything in APP.init
+			        j.hasOwnProperty(i) && j[i]();
+			    }
+			},
+			    // APP.init
+			    init: {
+			      // APP.init.assign_dom_vars
+			      assign_dom_vars: function() {
+			      	body = $(document.body);
+			      },
+			      // APP.init.stop_dead_links
+			      stop_dead_links: function(ev) {
+			      	body.on('click', 'a[href="#"]', function(ev) {
+			          // Stop that link!
+			          ev.preventDefault();
+			      });
+			      },
+			      // APP.init.measure_width
+			      measure_width: function() {
+			      	var timer;
+			      	var block = $('.example-block');
+
+			      	if (!block.length) {
+			      		return;
+			      	}
+
+			      	function do_calc() {
+			      		clearTimeout(timer);
+
+			      		block.each(function() {
+			      			var el = $(this);
+			      			var width = el.outerWidth() + 'px';
+			      			el.find('.dynamic-px-width:first').html(width);
+			      		});
+			      	}
+
+			      	$(window).load(function() {
+			      		do_calc();
+			      	});
+
+			      	$(window).off('resize.do_calc').on('resize.do_calc', function() {
+			      		clearTimeout(timer);
+			      		timer = setTimeout(do_calc, 16);
+			      	});
+			      }
+			  }
+			};
+
+			// Parameters: jQuery, window, document.
+		})(jQuery, this, this.document);
+
+		</script>
+
+</head>
+<body>
+<br/>
+		<span> {{ title }} | </span><a class="link" href="http://localhost:8888/notebooks/mturk%20%7C%20experiments_controller.ipynb#ken_results">results of experiments</a><br/>
+
+	<div class='grid-container'>
+
+		{% for experiment_id in eids %}
+		<div  class="grid-25" id='experiment'>
+			<!-- <iframe height="100px" frameBorder="0" src="http://inteco.cloudapp.net:4998/get_tasks?experiment_id={{ experiment_id }}&proj=experiment_id,id,submit_to,taskid"></iframe> -->
+			<div class='grid-container' id='tasks'>
+				<p>{{ tasks[experiment_id][0]['use_sandbox'] | e}}: {{ tasks[experiment_id][0]['desc'] | e}} : {{experiment_id}}</p>
+					{% for task in tasks[experiment_id]%}
+					<div class="grid-50">
+						<a href="{{ task['url'] }}">{{ task['task_type'] }}</a> <br/>
+						Finished={{ task['FINISHED'] }}<br/>
+						AA={{ task['NumberOfAssignmentsAvailable'] }}<br/>
+						AvgCost: {{task['Avg Hourly Cost']}}<br/>
+						MedCost: {{task['Median Hourly Cost']}}<br/>
+						Avail: {{task['AAvail']}}<br/>
+						Pend: {{task['APend']}}<br/>
+						Comp: {{task['AComp']}}<br/>
+						Create Time: {{task['createTime']}}<br/>
+						Duration: {{task['duration']}}<br/>
+
+						{% if 'generate' in task['task_type'] %}
+						<p>Generated: <a class="link" href="/get/messages?experiment_id={{ experiment_id }}&lastn=100&proj=text"> {{ getc('messages',experiment_id) }} </a></p>
+						<p>Bad: <a class="link" href="/get/bad_messages?experiment_id={{ experiment_id }}&lastn=100&proj=text"> {{ getc('bad_messages',experiment_id) }} </a></p>
+						{% elif 'rat' in task['task_type']%}
+						<p>Rated: <a class="link" href="/get/rated_messages?experiment_id={{ experiment_id }}&lastn=100&proj=text,mean"> {{ getc('rated_messages',experiment_id) }} </a></p>
+						{% endif%}
+					</div>
+
+				{% endfor %}
+			
+		</div>
+
+		<div id='stats'>
+			
+			<!-- 
+			<p>Sets: <a class="link" href="/get/rated_sets?experiment_id={{ experiment_id }}&lastn=100"> {{ getc('rated_sets',experiment_id) }}</a></p> -->
+		</div>  	
+
+		<div id='feedbacks'>
+			<a class="link" href="/get/responses?experiment_id={{ experiment_id }}&proj=feedback_comment&lastn=100">feedback</a>	
+
+		</div>
+	</div>
+	{% endfor %}
+	<div  class="grid-50" id='badWorkers'>
+		<h3>Bad Workers</h3>
+		<div>
+			<ul>
+				{% for wid in bad_workers %}
+				<li><a class='link' href='/get/bad_votes?json=True&lastn=20&workerId={{ wid|e }}&proj=reason'>{{ wid|e }}</a> 
+				<a class="link" href='/utils/block_worker?aid={{wid |e}}'>x</a>| {{ bad_workers[wid]['bad']|e }} / {{ bad_workers[wid]['all']|e }} | 
+				{% for ass in bad_workers[wid]['badass'] %}   <a class="link" href="/utils/RejectAssignment?AssignmentId={{ass}}&RequesterFeedback=More information can be found at https://goo.gl/QAkHaJ.">r</a>,<a class="link" href="/utils/approve_rejected_assignment?aid={{ass}}">a</a> ; {% endfor %}</li>
+				{% endfor %}
+			</ul>
+
+		</div>
+	</div>	
+	<div  class="grid-50" id='allResponses'>
+		<h3>Worker Distribution</h3>
+		<div>
+			<ul>
+				{% for wid in worker_dist %}
+				<li>{{ wid }} : {{ worker_dist[wid] }}</li>
+				{% endfor %}
+			</ul>
+
+		</div>
+	</div>
+<!-- 	<div  class="grid-50" id='experiments'>
+		<h3>Experiments</h3>
+		<div>
+			<ul>
+				{% for eid, edesc in exp_ids%}
+				<li><a class="link" href="/get_experiment?eids={{ eid|e }}">{{ eid|e }} | {{ edesc|e }}</a></li>
+				{% endfor %}
+			</ul>
+
+		</div>
+	</div>	 -->
+	<div  class="grid-50" id='experiments'>
+		<h3>Sessions </h3>
+		<div>
+			<ul>
+				{% for session in last_sessions%}
+				{% set eids = session['experiment_ids']| join(',') %}
+				<li><a class="link" href="/get_experiment?eids={{ eids }}">{{ session['datetime'][:15] | e }} | </a></li>
+				{% endfor %}
+			</ul>
+
+		</div>
+	</div>	
+	<div  class="grid-50" id='last_tasks'>
+		<h3>Last Tasks and HITS</h3>
+		<iframe width=100% height="600px" src="/last_tasks"></iframe>
+	</div>	
+	<div  class="grid-50" id='last_experiments'>
+		<h3><a href='/last_experiments'>Last Experiments</a></h3>
+		<iframe width=100% height="600px" src="/last_experiments/26"></iframe>
+	</div>	
+
+</div>
+</body>
+</html>
