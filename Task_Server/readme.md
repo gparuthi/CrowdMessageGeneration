@@ -1,4 +1,4 @@
-CrowdMessage System Technical Documentation
+Crowd Generated Messages
 ===
 Author: Gaurav Paruthi
 Date Created: 1/23/15
